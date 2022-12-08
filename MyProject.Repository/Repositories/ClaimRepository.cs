@@ -1,51 +1,54 @@
-﻿using MyProject.Repositories.Entities;
-using MyProject.Repositories.Interfaces;
+﻿using MyProject.Repository;
+using MyProject.Repository.Repositories;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using tray.first.Interface;
+using MyProject.Repositories.Interfaces;
+using MyProject.Repositories.Entities;
 
 namespace MyProject.Repository.Repositories
 {
-    public class ClaimRepository : IClaimReposirory
+    public class ClaimRepository : IClaimRepository
     {
         private readonly IContext _context;
         public ClaimRepository(IContext context)
         {
             _context = context;
         }
-        public Claim Add(int id, int roleId, int permissionId, EPolicy policy)
+        public async Task <ClaimDTO> AddAsync(int id, int roleId, int permissionId, EPolicy policy)
         {
-            
-
-            
-            _context.Claims.Add(new Claim() {Id=id , RoleId = roleId, PermissionId= permissionId, Policy=policy });
+            _context.Claims.Add(new ClaimDTO() {Id=id , RoleId = roleId, PermissionId= permissionId, Policy=policy });
+            await _context.SaveChangesAsync();
             return GetById(id);
 
         }
 
-        public Claim Delete(int id)
+        public async Task DeleteAsync(int id)
         {
-            Claim claim = GetById(id);
+            ClaimDTO claim = GetById(id);
+            
             _context.Claims.Remove(claim);
-            return claim;
+            await _context.SaveChangesAsync();
+            
         }
 
-        public List<Claim> GetAll()
+        public List<ClaimDTO> GetAll()
         {
             return _context.Claims;
         }
 
-        public Claim GetById(int id)
+        public ClaimDTO GetById(int id)
         {
             return _context.Claims.First(x=>x.Id==id);
         }
 
-        public Claim Update(Claim claim)
+        public async Task<ClaimDTO> UpdateAsync(ClaimDTO claim)
         {
             _context.Claims[_context.Claims.IndexOf(_context.Claims.First( x => x.Id == claim.Id))] =claim;
+            await _context.SaveChangesAsync();
             return claim;
         }
     }

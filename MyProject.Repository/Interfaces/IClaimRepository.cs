@@ -5,18 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace MyProject.Repositories.Interfaces
 {
-    public interface IRoleRepository
+    public interface IClaimRepository
+
     {
-        List<Role> GetAll();
+        List<ClaimDTO> GetAll();
 
-        Role GetById(int id);
+        ClaimDTO GetById(int id);
 
-        Task<Role> AddAsync(int id, string name, string description);
+        Task<ClaimDTO> AddAsync(int id, int roleId, int permissionId, EPolicy policy);
 
-        Task<Role> UpdateAsync(Role role);
+        Task<ClaimDTO> UpdateAsync(ClaimDTO claim);
 
         Task DeleteAsync(int id);
+
     }
 }

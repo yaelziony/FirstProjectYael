@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyProject.Repositories.Entities;
 using MyProject.Repositories.Interfaces;
+using MyProject.Repository.Repositories;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyProject.WebAPI.Controllers
 {
-    public class ClaimController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ClaimController : ControllerBase
     {
         private readonly IClaimRepository _claimrepository;
         public ClaimController(IClaimRepository Claimrepository)
@@ -16,26 +20,30 @@ namespace MyProject.WebAPI.Controllers
             _claimrepository = Claimrepository;
         }
         [HttpGet]
-        public List<Claim> GetAll()
+        public List<ClaimDTO> GetAll()
         {
             return _claimrepository.GetAll();
         }
         [HttpGet("{id}")]
-        public List<Claim> GetById(int id)
+        public ClaimDTO GetById(int id)
         {
             return _claimrepository.GetById(id);
         }
-        public Claim Post(id ,roleId,permissionId,policy )
+        [HttpPost]
+        public async Task<ClaimDTO> Post(ClaimDTO claim)
         {
-            return _claimrepository.Add(id,roleId, permissionId, policy);
+            return await _claimrepository.AddAsync(claim.Id, claim.PermissionId, claim.RoleId, claim.Policy);
+
         }
-        public Claim Put(Claim claim)
+        [HttpPut]
+        public async Task<ClaimDTO> Put(ClaimDTO claim)
         {
-            return _claimrepository.Update(claim);
+            return await _claimrepository.UpdateAsync(claim);
         }
-        public Claim Delete(int id)
+        [HttpDelete]
+        public async Task Delete(int id)
         {
-            return _claimrepository.Delete(id);
+            _claimrepository.DeleteAsync(id);
         }
     }
 }

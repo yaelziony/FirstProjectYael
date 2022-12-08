@@ -7,9 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using tray.first.Interface;
 
-namespace tray.first.Repositories
+namespace MyProject.Repository.Repositories
 {
     
     public class RoleRepository : IRoleRepository
@@ -22,19 +21,20 @@ namespace tray.first.Repositories
             _context = context;
         }
       
-        public Role Add(int id, string name, string description)
+        public async Task<Role> AddAsync(int id, string name, string description)
         {
 
             _context.Roles.Add(new Role { Id = id, Name = name, Description = description });
-             return _context.Roles.First(p => p.Id == id);
+            await _context.SaveChangesAsync();
+            return _context.Roles.First(p => p.Id == id);
         }
 
-        public Role Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             Role r = GetById( id);
-            //_context.Roles= _context.Roles.Where(p1 => p1.Id != id).ToList();
+            _context.Roles= _context.Roles.Where(p1 => p1.Id != id).ToList();
             _context.Roles.Remove(r);
-            return r;
+            await _context.SaveChangesAsync();
         }
         
 
@@ -48,12 +48,13 @@ namespace tray.first.Repositories
             return _context.Roles.First(p => p.Id == id);
         }
 
-        public Role Update(Role role)
+        public async Task<Role> UpdateAsync(Role role)
         {
-        Role r = GetById(role.Id);
-        r.Name= role.Name;
-        r.Description = role.Description;
-        return r;
+            Role r = GetById(role.Id);
+            r.Name= role.Name;
+            r.Description = role.Description;
+            await _context.SaveChangesAsync();
+            return r;
         }
 
         

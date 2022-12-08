@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyProject.Repositories.Entities
+namespace MyProject.Common.DTOs
 {
     public enum EPolicy { Allow, Deny }
-
     public class ClaimDTO
     {
         public int Id { get; set; }

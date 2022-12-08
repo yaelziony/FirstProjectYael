@@ -5,32 +5,46 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Http;
+using MyProject.Common.DTOs;
+//change
 
 namespace MyProject.WebAPI.Controllers
 {
-    public class PermisssionController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PermisssionController : ControllerBase
     {
         private readonly IPermissionRepository _permissionrepository;
         public PermisssionController(IPermissionRepository permissionrepository)
         {
             _permissionrepository = permissionrepository;
-         }
+        }
         [HttpGet]
-        public List<Permission> GetAll()
+        public List<PermissionDTO> GetAll()
         {
             return _permissionrepository.GetAll();
         }
         [HttpGet("{id}")]
-        public List<Permission> GetById(int id)
+        public Permission GetById(int id)
         {
             return _permissionrepository.GetById(id);
         }
-        public Permission Post(Permission permission)
+        [HttpPost]
+        public async Task<PermissionDTO> Post(Permission permission)
         {
-            _permissionrepository.Add(permission);
+            return await _permissionrepository.AddAsync(permission.Id, permission.Name, permission.Description);
         }
-        public 
+        [HttpPut]
+        public async Task<Permission> Put(Permission permission)
+        {
+            return await _permissionrepository.UpdateAsync(permission);
+        }
+        [HttpDelete]
+        public async Task Delete(int id)
+        {
+            await _permissionrepository.DeleteAsync(id);
+        }
 
 
     }

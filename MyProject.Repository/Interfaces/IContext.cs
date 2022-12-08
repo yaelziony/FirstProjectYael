@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace tray.first.Interface
+namespace MyProject.Repositories.Interfaces
 {
     public interface IContext
     {
@@ -13,6 +13,7 @@ namespace tray.first.Interface
 
         public List<Permission> Permissions { get; set; }
 
-        public List<Claim> Claims { get; set; }
+        public List<ClaimDTO> Claims { get; set; }
+        Task<int> SaveChangesAsync();
     }
 }
